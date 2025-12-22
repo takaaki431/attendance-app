@@ -10,8 +10,12 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['"Noto Sans JP"', "Inter", "Helvetica", "Arial", "sans-serif"].join(
-      ", ",
-    ),
+    fontFamily: [
+      '"Noto Sans JP"',
+      "Inter",
+      "Helvetica",
+      "Arial",
+      "sans-serif",
+    ].join(", "),
   },
 });
