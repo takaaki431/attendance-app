@@ -1,73 +1,37 @@
-# React + TypeScript + Vite
+# attendance-app frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+勤怠管理ポートフォリオのフロントエンド (React + TypeScript + Vite)。msw でモック API を立て、ログイン〜ロール別ダッシュボード、出勤/退勤の UI まで体験できます。
 
-Currently, two official plugins are available:
+## セットアップ
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+開発サーバー: http://localhost:5173  
+`npm run dev` で msw が自動起動します。
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ログイン情報（モック）
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- 社員: `loginId: 001`, `password: pass` → `/employee`
+- 管理者: `loginId: admin`, `password: pass` → `/admin`
+
+## 画面と機能
+
+- `/login`: RHF + zod でバリデーション。msw 経由で `/api/login` を呼び、Zustand にトークン/ユーザー情報を保存。ロールに応じてリダイレクト。
+- `/employee`: マイページ。今日の勤怠ステータスを取得して表示。出勤/退勤ボタンでモック API (`/attendance/clock-in`, `/attendance/clock-out`) を呼び、React Query のキャッシュを更新。
+- `/admin`: 管理者ダッシュボードのプレースホルダー。ダミーの当日勤怠テーブル表示。
+- 未ログインまたは権限違いは `/login` にリダイレクト。
+
+## 技術スタック
+
+- React 18, TypeScript, Vite
+- Zustand（認証状態）
+- TanStack React Query（データフェッチ）
+- React Router
+- MUI
+- React Hook Form + zod
+- axios
+- msw（モック API）
